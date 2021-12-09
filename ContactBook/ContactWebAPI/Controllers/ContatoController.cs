@@ -56,5 +56,11 @@ namespace ContactWebAPI.Controllers
             ContatoBusiness contatoBusiness = new ContatoBusiness();
             return Ok(contatoBusiness.DeletarContato(id));
         }
+        [HttpPatch("Update/{id}")]
+        public IActionResult UpdateContato([FromBody] ContatoDTO contatoDTO, int id)
+        {
+            ContatoBusiness contatoBusiness = new ContatoBusiness();
+            return Ok(contatoBusiness.UpdateContato(contatoDTO, id));
+        }
     }
 }

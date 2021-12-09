@@ -69,31 +69,7 @@ namespace ContactWinforms.Forms
 
         private void btnDelete_Click_1(object sender, EventArgs e)
         {
-            int id = 0;
-            string txtIdGet = txtId.Text;
-            bool success = Int32.TryParse(txtIdGet, out id);
-            string msg = string.Empty;
-
-            if (!string.IsNullOrEmpty(txtIdGet) && success)
-            {
-
-                ContatoBusiness contatoBusiness = new ContatoBusiness();
-                msg = contatoBusiness.DeletarContato(id);
-
-                txtNome.Text = string.Empty;
-                txtEndereco.Text = string.Empty;
-                txtEmail.Text = string.Empty;
-                maskedTxtTel.Text = string.Empty;
-                maskedTxtCpf.Text = string.Empty;
-                txtId.Text = string.Empty;
-
-
-                MessageBox.Show(msg);
-            }
-            else
-            {
-                MessageBox.Show("Nada deletado.");
-            }
+            
         }
 
         private void btnPesqEnd_Click(object sender, EventArgs e)
@@ -101,7 +77,7 @@ namespace ContactWinforms.Forms
             if (!string.IsNullOrEmpty(txtFill.Text))
             {
                 ContatoBusiness contatoBusiness = new ContatoBusiness();
-                ContatoDTO contatoDTO = contatoBusiness.PesquisarContato(txtFill.Text);
+                ContatoDTO contatoDTO = contatoBusiness.PesquisarContatoEnd(txtFill.Text);
 
                 if (contatoDTO != null)
                 {
@@ -156,6 +132,35 @@ namespace ContactWinforms.Forms
                 }
             }
 
+        }
+
+        private void btnDelete_Click(object sender, EventArgs e)
+        {
+            int id = 0;
+            string txtIdGet = txtId.Text;
+            bool success = Int32.TryParse(txtIdGet, out id);
+            string msg = string.Empty;
+
+            if (!string.IsNullOrEmpty(txtIdGet) && success)
+            {
+
+                ContatoBusiness contatoBusiness = new ContatoBusiness();
+                msg = contatoBusiness.DeletarContato(id);
+
+                txtNome.Text = string.Empty;
+                txtEndereco.Text = string.Empty;
+                txtEmail.Text = string.Empty;
+                maskedTxtTel.Text = string.Empty;
+                maskedTxtCpf.Text = string.Empty;
+                txtId.Text = string.Empty;
+
+
+                MessageBox.Show(msg);
+            }
+            else
+            {
+                MessageBox.Show("Nada deletado.");
+            }
         }
     }
 }

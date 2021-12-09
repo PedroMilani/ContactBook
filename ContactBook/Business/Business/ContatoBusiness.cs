@@ -88,6 +88,18 @@ namespace Business
             ContatoRepository contatoRepository = new ContatoRepository();
             return msg = contatoRepository.DeletarContato(id);
         }
-
+        public string UpdateContato(ContatoDTO contatoDTO, int id)
+        {
+            string msg = string.Empty;
+            if (string.IsNullOrEmpty(contatoDTO.Nome) && string.IsNullOrEmpty(contatoDTO.Endereco) && string.IsNullOrEmpty(contatoDTO.Telefone) && string.IsNullOrEmpty(contatoDTO.Email) && string.IsNullOrEmpty(contatoDTO.CPF))
+            {
+                return msg = "Insira algum dado para atualizar.";
+            }
+            else
+            {
+                ContatoRepository contatoRepository = new ContatoRepository();
+                return msg = contatoRepository.UpdateContato(contatoDTO, id);
+            }
+        }
     }
 }

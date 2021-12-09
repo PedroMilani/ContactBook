@@ -11,7 +11,8 @@ namespace DAL.Repositories
     public class ContatoRepository
     {
         private string ConnectionString = "Server=AgendaDB.mssql.somee.com;Database=AgendaDB;User Id=bdosilva_SQLLogin_1;Password=hw4prqorp6;TrustServerCertificate=True";
-
+        //private string ConnectionString = @"Server=(localdb)\MSSqlLocalDb;Database=AgendaDB;TrustServerCertificate=True";
+        
         public List<ContatoDTO> ObterTodosContatos()
         {
             List<ContatoDTO> Contatos = new List<ContatoDTO>();
@@ -221,16 +222,35 @@ namespace DAL.Repositories
             {
                 using (SqlConnection sqlConnection = new SqlConnection(ConnectionString))
                 {
+                    SqlCommand commandReader = new SqlCommand("SELECT CPF FROM Contatos WHERE id=@id", sqlConnection);
+
                     sqlConnection.Open();
-                    //string query = $"SELECT * FROM Contatos  WHERE Nome = '{Nome}'";
+                    string IdCheck = string.Empty;
+                    commandReader.Parameters.AddWithValue("@id", id);
+                    SqlDataReader reader = commandReader.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        {
+                            IdCheck = reader["CPF"].ToString().Trim();
+                        };
+                    }
 
-                    SqlCommand command = new SqlCommand("DELETE FROM Contatos WHERE id=@id", sqlConnection);
-                    command.Parameters.AddWithValue("@id", id);
-                    command.ExecuteNonQuery();
+                    reader.Close();
+                    if (string.IsNullOrEmpty(IdCheck))
+                    {
+                        sqlConnection.Close();
+                        return msg = "Id não encontrado.";
+                    }
+                    else
+                    {
+                        SqlCommand command = new SqlCommand("DELETE FROM Contatos WHERE id=@id", sqlConnection);
+                        command.Parameters.AddWithValue("@id", id);
+                        command.ExecuteNonQuery();
 
-                    sqlConnection.Close();
+                        sqlConnection.Close();
 
-                    return msg = "Contato apagado.";
+                        return msg = "Contato apagado.";
+                    }
                 }
             }
             catch (Exception)
@@ -238,6 +258,91 @@ namespace DAL.Repositories
                 return msg = "Algo deu errado ao deletar contato.";
             }
         }
+        public string UpdateContato(ContatoDTO contatoDTO, int id)
+        {
+            string msg = string.Empty;
+            if (string.IsNullOrEmpty(contatoDTO.Nome) && string.IsNullOrEmpty(contatoDTO.Endereco) && string.IsNullOrEmpty(contatoDTO.Telefone) && string.IsNullOrEmpty(contatoDTO.Email) && string.IsNullOrEmpty(contatoDTO.CPF))
+            {
+                return msg = "Insira algum dado para atualizar.";
+            }
+            else
+            {
+                try
+                {
+                    using (SqlConnection sqlConnection = new SqlConnection(ConnectionString))
+                    {
+                        SqlCommand commandReader = new SqlCommand("SELECT CPF FROM Contatos WHERE id=@id", sqlConnection);
 
+                        sqlConnection.Open();
+                        string IdCheck = string.Empty;
+                        commandReader.Parameters.AddWithValue("@id", id);
+                        SqlDataReader reader = commandReader.ExecuteReader();
+                        while (reader.Read())
+                        {
+                            {
+                                IdCheck = reader["CPF"].ToString().Trim();
+                            };
+                        }
+
+                        reader.Close();
+                        if (string.IsNullOrEmpty(IdCheck))
+                        {
+                            sqlConnection.Close();
+                            return msg = "Id não encontrado.";
+                        }
+                        else
+                        {
+                            if (!string.IsNullOrEmpty(contatoDTO.Nome))
+                            {
+                                SqlCommand command = new SqlCommand("UPDATE Contatos SET Nome=@Nome WHERE id=@id", sqlConnection);
+                                command.Parameters.Add("@Nome", SqlDbType.VarChar).Value = contatoDTO.Nome;
+                                command.Parameters.AddWithValue("@id", id);
+                                command.ExecuteNonQuery();
+                            }
+                            if (!string.IsNullOrEmpty(contatoDTO.Endereco))
+                            {
+                                SqlCommand command = new SqlCommand("UPDATE Contatos SET Endereco=@Endereco WHERE id=@id", sqlConnection);
+                                command.Parameters.Add("@Endereco", SqlDbType.VarChar).Value = contatoDTO.Endereco;
+                                command.Parameters.AddWithValue("@id", id);
+                                command.ExecuteNonQuery();
+                            }
+                            if (!string.IsNullOrEmpty(contatoDTO.Telefone))
+                            {
+                                SqlCommand command = new SqlCommand("UPDATE Contatos SET Telefone=@Telefone WHERE id=@id", sqlConnection);
+                                command.Parameters.Add("@Telefone", SqlDbType.VarChar).Value = contatoDTO.Telefone;
+                                command.Parameters.AddWithValue("@id", id);
+                                command.ExecuteNonQuery();
+                            }
+                            if (!string.IsNullOrEmpty(contatoDTO.Email))
+                            {
+                                SqlCommand command = new SqlCommand("UPDATE Contatos SET Email=@Email WHERE id=@id", sqlConnection);
+                                command.Parameters.Add("@Email", SqlDbType.VarChar).Value = contatoDTO.Email;
+                                command.Parameters.AddWithValue("@id", id);
+                                command.ExecuteNonQuery();
+                            }
+                            if (!string.IsNullOrEmpty(contatoDTO.CPF))
+                            {
+                                SqlCommand command = new SqlCommand("UPDATE Contatos SET CPF=@CPF WHERE id=@id", sqlConnection);
+                                command.Parameters.Add("@CPF", SqlDbType.VarChar).Value = contatoDTO.CPF;
+                                command.Parameters.AddWithValue("@id", id);
+                                command.ExecuteNonQuery();
+                            }
+
+                            sqlConnection.Close();
+                            return msg = "Contato atualizado.";
+
+                        }
+
+
+                    }
+                }
+                catch (Exception)
+                {
+                    return msg = "Algo deu errado ao atualizar contato, talvez o formato do CPF esteja errado.";
+
+                }
+
+            }
+        }
     }
 }

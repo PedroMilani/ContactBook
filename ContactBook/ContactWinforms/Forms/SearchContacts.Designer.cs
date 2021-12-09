@@ -150,6 +150,7 @@ namespace ContactWinforms.Forms
             this.btnDelete.TabIndex = 22;
             this.btnDelete.Text = "DELETAR";
             this.btnDelete.UseVisualStyleBackColor = true;
+            this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
             // 
             // txtId
             // 
@@ -269,6 +270,8 @@ namespace ContactWinforms.Forms
             this.Controls.Add(this.txtEndereco);
             this.Controls.Add(this.txtNome);
             this.Controls.Add(this.txtFill);
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "SearchContacts";
             this.Text = "SearchContacts";
             this.ResumeLayout(false);
